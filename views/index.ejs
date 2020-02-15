@@ -5,8 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Food Connector</title>
-</head>
+    <link rel="stylesheet" type="text/css" href="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.45.0/maps/maps.css">
+        <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.45.0/maps/maps-web.min.js"></script>
+        <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.45.0/services/services-web.min.js"></script>
+        <style>
+        body {
+    margin: 0;
+}
+#map {
+    height: 100vh;
+    width: 100vw;
+}
+.tt-form-label {
+    position: fixed;
+    z-index: 1;
+}
+        </style>
+    </head>
 <body>
     <h1>Hello DeveloperWeek</h1>
+    <div id="map">
+    </div>
+    <script>
+    var map = tt.map({
+    key: 'rOGLzemQ7stZHZsHazIIWuC8j9aiNAdk',
+    container: 'map',
+    style: 'tomtom://vector/1/basic-main'
+});
+map.addControl(new tt.FullscreenControl());
+map.addControl(new tt.NavigationControl());
+    </script>
 </body>
 </html>
