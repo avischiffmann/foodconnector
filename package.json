@@ -1,0 +1,24 @@
+{
+  "name": "foodconnector",
+  "version": "1.0.0",
+  "description": "Repo for DeveloperWeek 2020 Hackathon",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avischiffmann/foodconnector.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/avischiffmann/foodconnector/issues"
+  },
+  "homepage": "https://github.com/avischiffmann/foodconnector#readme",
+  "dependencies": {
+    "ejs": "^3.0.1",
+    "express": "^4.17.1"
+  }
+}
