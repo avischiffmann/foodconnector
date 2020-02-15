@@ -1,39 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Food Connector</title>
     <link rel="stylesheet" type="text/css" href="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.45.0/maps/maps.css">
-        <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.45.0/maps/maps-web.min.js"></script>
-        <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.45.0/services/services-web.min.js"></script>
-        <style>
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.45.0/maps/maps-web.min.js"></script>
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.45.0/services/services-web.min.js"></script>
+    <style>
         body {
-    margin: 0;
-}
-#map {
-    height: 100vh;
-    width: 100vw;
-}
-.tt-form-label {
-    position: fixed;
-    z-index: 1;
-}
-        </style>
-    </head>
+            margin: 0;
+        }
+
+        #map {
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .tt-form-label {
+            position: fixed;
+            z-index: 1;
+        }
+        h1 {
+            color: green;
+        }
+    </style>
+</head>
+
 <body>
-    <h1>Hello DeveloperWeek</h1>
+    <h1>Food Connector</h1>
+    <button onclick="add()">Add a new marker</button>
+    <p>Longitude</p><input id="longitudeField" type="text">
+    <p>Latitude</p><input id="latitudeField" type="text" style="margin-bottom: 25px;">
     <div id="map">
     </div>
     <script>
-    var map = tt.map({
+        longitudeField = document.getElementById("longitudeField");
+        latitudeField = document.getElementById("latitudeField");
+
+        function add(){
+            createMap(longitudeField.value, latitudeField.value)
+        }
+
+        function createMap(longitude){
+            var HQ= [longitude, 37.7749];
+
+var map = tt.map({
     key: 'rOGLzemQ7stZHZsHazIIWuC8j9aiNAdk',
     container: 'map',
-    style: 'tomtom://vector/1/basic-main'
+    style: 'tomtom://vector/1/basic-main',
+    center: HQ,
+    zoom: 15
 });
+
 map.addControl(new tt.FullscreenControl());
 map.addControl(new tt.NavigationControl());
+        }
     </script>
 </body>
+
 </html>

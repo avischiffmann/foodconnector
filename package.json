@@ -20,6 +20,7 @@
   "dependencies": {
     "ejs": "^3.0.1",
     "express": "^4.17.1",
+    "firebase-admin": "^8.9.2",
     "nodemon": "^2.0.2"
   }
 }
