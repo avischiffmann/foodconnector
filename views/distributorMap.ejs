@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Food Connector</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.45.0/maps/maps.css">
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.45.0/maps/maps-web.min.js"></script>
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.45.0/services/services-web.min.js"></script>
@@ -17,12 +18,14 @@
 
         #map {
             height: 100vh;
-            width: 60vw;
+            width: 80vw;
         }
+
         .tt-form-label {
             position: fixed;
             z-index: 1;
         }
+
         h1 {
             color: green;
         }
@@ -32,24 +35,67 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col">
-                <h1>Stuff</h1>
-                <button>New Donation</button>
+            <div class="col-3">
+                <h1>Distributions</h1>
+                <button id="newRequestBtn">New Distribution</button>
 
-                <h2>Previous Donations</h2>
+                <form method="post" action="/newDistribution">
+                    <label for="foods">Choose a food:</label>
+                    <select id="foods" name="foods">
+                        <option value="🍏Apples">🍏Apples</option>
+                        <option value="🥬Greens">🥬Greens</option>
+                        <option value="🍞Bread">🍞Bread</option>
+                        <option value="🌽Corn">🌽Corn</option>
+                    </select>
+                    <br>
+
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" min="1"> <br>
+
+                    <label for="price">Price/item (leave as 0 if free):</label>
+                    <input type="number" id="price" name="price" min="0"> <br>
+
+                    <label for="address">Address:</label>
+                    <input type="address" id="address" name="address" min="1"> <br>
+
+                    <label for="expiration">Expiration date</label>
+                    <input type="text" name="expiration" /> <br>
+
+                    <label for="name">Name/Company Name</label>
+                    <input type="text" name="name" /> <br>
+
+                    <label for="foods">Are you an individual or an organization?</label>
+                    <select id="typeOfUser" name="typeOfUser">
+                        <option value="Individual">Individual</option>
+                        <option value="Organization">Organization</option>
+                    </select>
+                    <br>
+                    <label for="establishment">What kind of establishment are you?</label>
+                    <select id="establishment" name="establishment">
+                        <option value="Cafe">Cafe</option>
+                        <option value="Shelter">Shelter</option>
+                        <option value="Hotel">Hotel</option>
+                        <option value="Restaurant">Restaurant</option>
+                    </select>
+                    <br>
+                    <div class="form-actions">
+                        <button class="button" type="submit">Send</button>
+                    </div>
+                </form>
+
+                <h2>Recent Distributions</h2>
+           
+                
             </div>
-            <div class="col">
+            <div class="col-9">
                 <div id="map">
                 </div>
-            </div>
-            <div class="col">
-                
             </div>
         </div>
     </div>
     <script>
         var map = tt.map({
-            key: 'rOGLzemQ7stZHZsHazIIWuC8j9aiNAdk',
+            key: 'PULYzrAblFY0Hoyr6hyGMpYzTTu1tiGT',
             container: 'map',
             center: [-0.128666, 51.505814],
             style: 'tomtom://vector/1/basic-main',
@@ -62,19 +108,19 @@
         var eventListenersAdded = false;
 
         var points = [
-        <% for( let index = 0; index < total; index++ ) { %>
-            {
-                coordinates: [<%= longitudes[index] %>, <%= latitudes[index] %>],
-                properties: {
-                    id: <%= latitudes[index] %>,
-                    name: 'Checkpoint A'
-                }
-            },
+        <% for (let index = 0; index < total; index++) { %>
+        {
+            coordinates: [<%= longitudes[index] %>, <%= latitudes[index] %>],
+            properties: {
+                id: <%= latitudes[index] %>,
+                name: "no",
+            }
+        },
     <% } %>
         ];
         var geoJson = {
             type: 'FeatureCollection',
-            features: points.map(function(point) {
+            features: points.map(function (point) {
                 return {
                     type: 'Feature',
                     geometry: {
@@ -87,25 +133,25 @@
         };
 
         function refreshMarkers() {
-            Object.keys(markersOnTheMap).forEach(function(id) {
+            Object.keys(markersOnTheMap).forEach(function (id) {
                 markersOnTheMap[id].remove();
                 delete markersOnTheMap[id];
             });
 
-            map.querySourceFeatures('point-source').forEach(function(feature) {
+            map.querySourceFeatures('point-source').forEach(function (feature) {
                 if (feature.properties && !feature.properties.cluster) {
                     var id = parseInt(feature.properties.id, 10);
                     if (!markersOnTheMap[id]) {
                         var newMarker = new tt.Marker().setLngLat(feature.geometry.coordinates);
                         newMarker.addTo(map);
-                        newMarker.setPopup(new tt.Popup({offset: 30}).setText(feature.properties.name));
+                        newMarker.setPopup(new tt.Popup({ offset: 30 }).setHTML(`<h1>${feature.properties.name}</h1><br><p>This food is really good and its stale!</p>`));
                         markersOnTheMap[id] = newMarker;
                     }
                 }
             });
         }
 
-        map.on('load', function() {
+        map.on('load', function () {
             map.addSource('point-source', {
                 type: 'geojson',
                 data: geoJson,
@@ -158,7 +204,7 @@
                 }
             });
 
-            map.on('data', function(e) {
+            map.on('data', function (e) {
                 if (e.sourceId !== 'point-source' || !map.getSource('point-source').loaded()) return;
                 refreshMarkers();
 
@@ -169,10 +215,10 @@
                 }
             });
 
-            map.on('click', 'clusters', function(e) {
+            map.on('click', 'clusters', function (e) {
                 var features = map.queryRenderedFeatures(e.point, { layers: ['clusters'] });
                 var clusterId = features[0].properties.cluster_id;
-                map.getSource('point-source').getClusterExpansionZoom(clusterId, function(err, zoom) {
+                map.getSource('point-source').getClusterExpansionZoom(clusterId, function (err, zoom) {
                     if (err) {
                         return;
                     }
@@ -184,18 +230,24 @@
                 });
             });
 
-            map.on('mouseenter', 'clusters', function() {
+            map.on('mouseenter', 'clusters', function () {
                 map.getCanvas().style.cursor = 'pointer';
             });
 
-            map.on('mouseleave', 'clusters', function() {
+            map.on('mouseleave', 'clusters', function () {
                 map.getCanvas().style.cursor = '';
             });
         });
     </script>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
