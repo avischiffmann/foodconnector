@@ -32,15 +32,19 @@ let docRef = db.collection('Distributors').doc();
 // });
 
 var counter = 0;
+var latitudes = [];
+
 db.collection('Distributors').get()
   .then((snapshot) => {
     snapshot.forEach((doc) => {
-      console.log(doc.id, '=>', doc.data().name);
+      console.log(doc.id, '=>', doc.data().latitude);
       counter++;
-      console.log(counter)
+      latitudes.push(doc.data().latitude)
+      console.log(latitudes);
     });
     app.get('/', async (req, res) => {
-        res.render('index', { total: counter});
+        console.log(latitudes);
+        res.render('index', { total: counter, latitudes: latitudes});
     });
   })
   .catch((err) => {
