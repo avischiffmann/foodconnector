@@ -17,7 +17,7 @@ Distributor can either choose to sell or give away for free
 ## Getting Started
 ```sh
 # install dependencies
-node install
+npm install
 
 # run locally
 node app.js
