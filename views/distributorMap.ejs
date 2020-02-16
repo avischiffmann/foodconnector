@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.45.0/maps/maps.css">
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.45.0/maps/maps-web.min.js"></script>
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.45.0/services/services-web.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700|Roboto&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -29,62 +30,175 @@
         h1 {
             color: green;
         }
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            padding-top: 100px;
+            /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        ::placeholder {
+            /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: #29C19E;
+        }
+
+        .changeReplaceInputColor::placeholder {
+            /* WebKit, Blink, Edge */
+            color: gray;
+        }
+        select{
+   height: 30px;
+}
     </style>
 </head>
 
-<body>
+<body style="background-color: #C0382B;">
     <div class="container-fluid">
         <div class="row">
             <div class="col-3">
-                <h1>Distributions</h1>
-                <button id="newRequestBtn">New Distribution</button>
+                <h1
+                style="font-family: 'Poppins', sans-serif; color: white; font-weight: bold; font-size: 35px; text-align: center; margin-top: 25px;">
+                Distributor</h1>                
+                <div style="text-align: center;">
+                    <button type="button" class="btn btn-success" style="font-family: 'Roboto', sans-serif; margin-bottom: 35px;" id="requestButton">Create a new distribution</button>
+                </div>
+                
 
-                <form method="post" action="/newDistribution">
-                    <label for="foods">Choose a food:</label>
-                    <select id="foods" name="foods">
-                        <option value="🍏Apples">🍏Apples</option>
-                        <option value="🥬Greens">🥬Greens</option>
-                        <option value="🍞Bread">🍞Bread</option>
-                        <option value="🌽Corn">🌽Corn</option>
-                    </select>
-                    <br>
+                  <!-- The Modal -->
+                  <div id="myModal" class="modal">
 
-                    <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" name="quantity" min="1"> <br>
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                      <span class="close" id="close">&times;</span>
 
-                    <label for="price">Price/item (leave as 0 if free):</label>
-                    <input type="number" id="price" name="price" min="0"> <br>
+                      <form method="post" action="/newDistribution">
+                        <label for="foods" style="font-family: 'Poppins', sans-serif; color: #C0382B; font-size: 20px;">Choose a food:</label>
+                        <select id="foods" name="foods">
+                            <option value="🍏Apples">🍏Apples</option>
+                            <option value="🥬Greens">🥬Greens</option>
+                            <option value="🍞Bread">🍞Bread</option>
+                            <option value="🌽Corn">🌽Corn</option>
+                        </select>
+                        <br>
+    
+                        <label for="quantity" style="font-family: 'Poppins', sans-serif; color: #C0382B; font-size: 20px;">Quantity/pounds:</label>
+                        <input type="number" id="quantity" name="quantity" min="1"> <br>
+    
+                        <label for="price" style="font-family: 'Poppins', sans-serif; color: #C0382B; font-size: 20px;">Price/item (leave as 0 if free):</label>
+                        <input type="number" id="price" name="price" min="0"> <br>
+    
+                        <label for="address" style="font-family: 'Poppins', sans-serif; color: #C0382B; font-size: 20px;">Address:</label>
+                        <input type="address" id="address" name="address" min="1"> <br>
+    
+                        <label for="expiration" style="font-family: 'Poppins', sans-serif; color: #C0382B; font-size: 20px;">Expiration date</label>
+                        <input type="text" name="expiration" /> <br>
+    
+                        <label for="name" style="font-family: 'Poppins', sans-serif; color: #C0382B; font-size: 20px;">Name/Company Name</label>
+                        <input type="text" name="name" /> <br>
+    
+                        <label for="foods" style="font-family: 'Poppins', sans-serif; color: #C0382B; font-size: 20px;">Are you an individual or an organization?</label>
+                        <select id="typeOfUser" name="typeOfUser">
+                            <option value="Individual">Individual</option>
+                            <option value="Organization">Organization</option>
+                        </select>
+                        <br>
+                        <label for="establishment" style="font-family: 'Poppins', sans-serif; color: #C0382B; font-size: 20px;">What kind of establishment are you?</label>
+                        <select id="establishment" name="establishment">
+                            <option value="Cafe">Cafe</option>
+                            <option value="Shelter">Shelter</option>
+                            <option value="Hotel">Hotel</option>
+                            <option value="Restaurant">Restaurant</option>
+                        </select>
+                        <br>
+                        <div class="form-actions">
+                            <button class="btn btn-success" type="submit" style="font-family: 'Poppins', sans-serif; color: white;font-size: 20px;">Send</button>
+                        </div>
+                    </form>
 
-                    <label for="address">Address:</label>
-                    <input type="address" id="address" name="address" min="1"> <br>
-
-                    <label for="expiration">Expiration date</label>
-                    <input type="text" name="expiration" /> <br>
-
-                    <label for="name">Name/Company Name</label>
-                    <input type="text" name="name" /> <br>
-
-                    <label for="foods">Are you an individual or an organization?</label>
-                    <select id="typeOfUser" name="typeOfUser">
-                        <option value="Individual">Individual</option>
-                        <option value="Organization">Organization</option>
-                    </select>
-                    <br>
-                    <label for="establishment">What kind of establishment are you?</label>
-                    <select id="establishment" name="establishment">
-                        <option value="Cafe">Cafe</option>
-                        <option value="Shelter">Shelter</option>
-                        <option value="Hotel">Hotel</option>
-                        <option value="Restaurant">Restaurant</option>
-                    </select>
-                    <br>
-                    <div class="form-actions">
-                        <button class="button" type="submit">Send</button>
                     </div>
-                </form>
+                    <script>
+                      // Get the modal
 
-                <h2>Recent Distributions</h2>
-           
+                      // Get the button that opens the modal
+
+                      var modal = document.getElementById("myModal");
+
+                      // Get the button that opens the modal
+                      var btn = document.getElementById("requestButton");
+
+                      // Get the <span> element that closes the modal
+                      var span = document.getElementById("close");
+
+
+                      // When the user clicks the button, open the modal 
+                      btn.onclick = function () {
+                        modal.style.display = "block";
+                      }
+
+    
+                      // When the user clicks on <span> (x), close the modal
+                      span.onclick = function () {
+                        modal.style.display = "none";
+                      }
+
+                      // When the user clicks anywhere outside of the modal, close it
+                      window.onclick = function (event) {
+                        if (event.target == modal) {
+                          modal.style.display = "none";
+                        }
+                        
+                      }
+                    </script>
+                  </div>
+
+                <script>
+                    document.getElementById("consumerRequestForm").style.display = "none";
+
+                    document.getElementById("formHider").addEventListener("click", function () {
+                        document.getElementById("consumerRequestForm").style.display = "block";
+                    });
+
+                </script>
                 
             </div>
             <div class="col-9">
@@ -97,9 +211,7 @@
         var map = tt.map({
             key: 'PULYzrAblFY0Hoyr6hyGMpYzTTu1tiGT',
             container: 'map',
-            center: [-0.128666, 51.505814],
-            style: 'tomtom://vector/1/basic-main',
-            zoom: 10
+            style: 'tomtom://vector/1/basic-main'
         });
         map.addControl(new tt.FullscreenControl());
         map.addControl(new tt.NavigationControl());
@@ -113,7 +225,11 @@
             coordinates: [<%= longitudes[index] %>, <%= latitudes[index] %>],
             properties: {
                 id: <%= latitudes[index] %>,
-                name: "no",
+                name: "<%= foods[index] %>",
+                quantities: "<%= quantities[index] %>",
+                consumerNotes: "<%= consumerNotes[index] %>",
+                typesOfUser: "<%= typesOfUser[index] %>",
+                dates: "<%= dates[index] %>"
             }
         },
     <% } %>
@@ -144,7 +260,7 @@
                     if (!markersOnTheMap[id]) {
                         var newMarker = new tt.Marker().setLngLat(feature.geometry.coordinates);
                         newMarker.addTo(map);
-                        newMarker.setPopup(new tt.Popup({ offset: 30 }).setHTML(`<h1>${feature.properties.name}</h1><br><p>This food is really good and its stale!</p>`));
+                        newMarker.setPopup(new tt.Popup({ offset: 30 }).setHTML(`<h2 style="text-align: center;">${feature.properties.name}</h2><br><p style="font-size: 15px;"><span style="font-weight: bold">Quantitiy in pounds:</span> ${feature.properties.quantities}<br><br><span style="font-weight: bold">Special notes:</span> ${feature.properties.consumerNotes}<br><br> <span style="font-weight: bold">Address:</span> ${feature.properties.addresses} <br><br> <span style="font-weight: bold">Date posted:</span> ${feature.properties.dates} <br> </p>`));
                         markersOnTheMap[id] = newMarker;
                     }
                 }

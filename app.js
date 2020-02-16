@@ -114,7 +114,7 @@ db.collection('Distributors').get()
             prices.push(doc.data().price);
             foodQuantities.push(doc.data().quantity);
             distributorFoods.push(doc.data().food);
-            expirations.push(doc.data().expirations);
+            expirations.push(doc.data().expiration);
 
             console.log(counter);
             console.log(distributorFoods);
@@ -155,11 +155,47 @@ db.collection('Distributors').get()
                     console.log('Error getting documents', err);
                 });
         });
+        app.post('/consumerFilterGreens', function (req, res) {
+            consumerCounter = 0;
+            var foods = [];
+            var quantities = [];
+            var consumerNotes = [];
+            var typesOfUser = [];
+            var dates = [];
+            var consumerLats = [];
+            var consumerLons = [];
+
+            db.collection('Consumers').get()
+                .then((snapshot) => {
+                    snapshot.forEach((doc) => {
+                            consumerCounter++;
+                            console.log(doc.id, '=>', doc.data().food);
+                            foods.push(doc.data().food);
+                            quantities.push(doc.data().quantity);
+                            consumerNotes.push(doc.data().notes);
+                            typesOfUser.push(doc.data().typeOfUser);
+                            dates.push(doc.data().date);
+                            consumerLats.push(doc.data().lon);
+                            consumerLons.push(doc.data().lat);
+                        
+                    });
+                    res.render('consumerMapFilterGreens', { total: counter, latitudes: latitudes, longitudes, longitudes, names: names, totalRequests: consumerCounter, foods: foods, quantities: quantities, consumerNotes: consumerNotes, typesOfUser: typesOfUser, dates: dates, addresses: addresses, establishments: establishments, prices, prices, foodQuantities: foodQuantities, distributorFoods: distributorFoods, expirations: expirations });
+
+                })
+                .catch((err) => {
+                    console.log('Error getting documents', err);
+                });
+        });
         app.post('/distributor', function (req, res) {
             console.log(counter)
             consumerCounter = 0;
             var consumerLats = [];
             var consumerLons = [];
+            var foods = [];
+            var quantities = [];
+            var consumerNotes = [];
+            var typesOfUser = [];
+            var dates = [];
 
             db.collection('Consumers').get()
                 .then((snapshot) => {
@@ -167,10 +203,16 @@ db.collection('Distributors').get()
                         consumerCounter++;        
                         consumerLats.push(doc.data().lon);
                         consumerLons.push(doc.data().lat);
+                        foods.push(doc.data().food);
+                        quantities.push(doc.data().quantity);
+                        consumerNotes.push(doc.data().notes);
+                        typesOfUser.push(doc.data().typeOfUser);
+                        dates.push(doc.data().date);
+
+                        console.log(quantities)
 
                     });
-                    res.render('distributorMap', { total: consumerCounter, latitudes: consumerLons, longitudes, consumerLats });
-
+                    res.render('distributorMap', { total: consumerCounter, latitudes: consumerLons, longitudes, consumerLats, foods: foods, quantities: quantities, consumerNotes: consumerNotes, typesOfUser: typesOfUser, dates: dates });
                 })
                 .catch((err) => {
                     console.log('Error getting documents', err);
