@@ -3,8 +3,8 @@ var app = express();
 
 app.set("view engine", "ejs");
 
-app.get('/', async (req, res) => {
-    res.render('index');
+app.get('/signup', async (req, res) => {
+    res.render('signup');
 });
 
 app.listen(process.env.PORT || 3000);
@@ -22,9 +22,28 @@ admin.initializeApp({
 let db = admin.firestore();
 
 
-let docRef = db.collection('users').doc('qian');
+let docRef = db.collection('Distributors').doc();
 
-let setAda = docRef.set({
-  first: 'qian',
-  last: 'zuo'
-});
+// let setAda = docRef.set({
+//   latitude: 30,
+//   longitude: 120,
+//   name: "Panda Express",
+//   type: "Service"
+// });
+
+var counter = 0;
+db.collection('Distributors').get()
+  .then((snapshot) => {
+    snapshot.forEach((doc) => {
+      console.log(doc.id, '=>', doc.data().name);
+      counter++;
+      console.log(counter)
+    });
+    app.get('/', async (req, res) => {
+        res.render('index', { total: counter});
+    });
+  })
+  .catch((err) => {
+    console.log('Error getting documents', err);
+  });
+  
